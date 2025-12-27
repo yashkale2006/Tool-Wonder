@@ -1,20 +1,31 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ToolsWonder
 
-# Run and deploy your AI Studio app
+**Your Daily Tools, All in One Place**
 
-This contains everything you need to run your app locally.
+ToolsWonder is a comprehensive web application that provides a wide range of online tools and utilities to simplify your daily tasks. From image editing and document conversion to calculations, text processing, and developer utilities, everything you need is available in one convenient location.
 
-View your app in AI Studio: https://ai.studio/apps/temp/2
+## Features
 
-## Run Locally
+- Over 35+ tools in various categories
+- User-friendly interface
+- Fast and reliable performance
+- No software installation required
 
-**Prerequisites:**  Node.js
+## Tech Stack
 
+- Frontend: React, TypeScript, Vite
+- Backend: Node.js, Express
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Installation
+
+1. Clone the repo
+2. Install dependencies: `npm install`
+3. Start the app: `npm run dev`
+
+## Usage
+
+Browse tools, search, and use them instantly.
+
+## Author
+
+Yash Dilip Kale

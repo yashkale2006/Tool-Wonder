@@ -12,8 +12,16 @@ const sharp = require('sharp');
 const app = express();
 const PORT = 3001;
 
+// Body parsing middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Enable CORS
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
+
+
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -415,6 +423,10 @@ app.get('/currency-rates', async (req, res) => {
     });
   }
 });
+
+
+
+
 
 
 

@@ -13,8 +13,11 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfUse from './components/TermsOfUse';
+import Offline from './components/Offline';
+import InstallPrompt from './components/InstallPrompt';
 import { CATEGORIES, TOOLS } from './data';
 import { CategoryDefinition, Tool } from './types';
+import { isOnline, onOnlineStatusChange } from './utils/pwa';
 
 // ToolGrid Component with GSAP Animations
 const ToolGrid: React.FC<{ tools: Tool[] }> = ({ tools }) => {
@@ -56,14 +59,15 @@ const ToolGrid: React.FC<{ tools: Tool[] }> = ({ tools }) => {
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isOffline, setIsOffline] = useState(!isOnline());
 
   // Search Logic
   const filteredData = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
     if (!query) return null;
 
-    return TOOLS.filter(tool => 
-      tool.name.toLowerCase().includes(query) || 
+    return TOOLS.filter(tool =>
+      tool.name.toLowerCase().includes(query) ||
       tool.description.toLowerCase().includes(query) ||
       tool.category.toLowerCase().includes(query)
     );
@@ -74,9 +78,32 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // PWA Service Worker Registration is handled automatically by vite-plugin-pwa
+
+  // Offline/Online Status Monitoring
+  useEffect(() => {
+    const cleanup = onOnlineStatusChange((online) => {
+      setIsOffline(!online);
+    });
+
+    return cleanup;
+  }, []);
+
+  // Show offline page if user is offline
+  if (isOffline) {
+    return (
+      <ThemeProvider>
+        <Offline onRetry={() => window.location.reload()} />
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider>
       <AuthProvider>
+        {/* Install Prompt */}
+        <InstallPrompt />
+
         <Routes>
           <Route path="/" element={
             <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col transition-colors duration-300">

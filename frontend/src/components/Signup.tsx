@@ -114,7 +114,10 @@ const Signup: React.FC = () => {
       return;
     }
 
+    console.log('Calling signup API with:', { name, email, password: '***' });
     const success = await signup(name, email, password);
+    console.log('Signup API response:', success);
+
     if (success) {
       navigate('/');
     } else {

@@ -17,6 +17,7 @@ interface AuthContextType {
   signInWithGithub: () => Promise<void>;
   loading: boolean;
   session: any;
+  token: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,10 +37,15 @@ interface AuthProviderProps {
 class AuthClient {
   private baseURL = 'http://localhost:3001';
 
+  private getAuthHeaders() {
+    const token = localStorage.getItem('authToken');
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+  }
+
   async signInWithEmail(data: { email: string; password: string }) {
     const response = await fetch(`${this.baseURL}/api/auth/sign-in/email`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...this.getAuthHeaders() },
       credentials: 'include',
       body: JSON.stringify(data),
     });
@@ -49,7 +55,7 @@ class AuthClient {
   async signUpWithEmail(data: { name: string; email: string; password: string }) {
     const response = await fetch(`${this.baseURL}/api/auth/sign-up/email`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...this.getAuthHeaders() },
       credentials: 'include',
       body: JSON.stringify(data),
     });
@@ -59,7 +65,7 @@ class AuthClient {
   async signInWithSocial(provider: 'google' | 'github') {
     const response = await fetch(`${this.baseURL}/api/auth/sign-in/social`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...this.getAuthHeaders() },
       credentials: 'include',
       body: JSON.stringify({ provider }),
     });
@@ -73,13 +79,16 @@ class AuthClient {
   async signOut() {
     const response = await fetch(`${this.baseURL}/api/auth/sign-out`, {
       method: 'POST',
+      headers: this.getAuthHeaders(),
       credentials: 'include',
     });
     return response.json();
   }
 
   async getSession() {
+    const token = localStorage.getItem('authToken');
     const response = await fetch(`${this.baseURL}/api/auth/session`, {
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {},
       credentials: 'include',
     });
     return response.json();
@@ -92,21 +101,62 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
 
   useEffect(() => {
+    console.log('AuthProvider useEffect running');
+    // Check for token in URL params (after OAuth redirect)
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenFromUrl = urlParams.get('token');
+    console.log('Token from URL:', tokenFromUrl);
+    if (tokenFromUrl) {
+      localStorage.setItem('authToken', tokenFromUrl);
+      setToken(tokenFromUrl);
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      console.log('Token stored and URL cleaned');
+    }
     checkAuthStatus();
   }, []);
 
   const checkAuthStatus = async () => {
+    const currentToken = localStorage.getItem('authToken');
+    console.log('checkAuthStatus called, currentToken:', currentToken);
+    if (!currentToken) {
+      console.log('No token found, setting loading to false');
+      setLoading(false);
+      return;
+    }
+
     try {
+      console.log('Calling getSession...');
       const sessionData = await authClient.getSession();
+      console.log('Session data received:', sessionData);
+      // Handle different possible response formats
+      let userData = null;
       if (sessionData.user) {
-        setUser(sessionData.user);
+        userData = sessionData.user;
+      } else if (sessionData.id && sessionData.email) {
+        // Maybe the response is the user object directly
+        userData = sessionData;
+      }
+
+      if (userData) {
+        console.log('User found in session, setting user:', userData);
+        setUser(userData);
         setSession(sessionData);
+      } else {
+        console.log('No user in session data, clearing token');
+        // Token invalid, clear it
+        localStorage.removeItem('authToken');
+        setToken(null);
       }
     } catch (error) {
       console.error('Auth check error:', error);
+      localStorage.removeItem('authToken');
+      setToken(null);
     } finally {
+      console.log('Setting loading to false');
       setLoading(false);
     }
   };
@@ -114,7 +164,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     try {
       const result = await authClient.signInWithEmail({ email, password });
-      if (result.user) {
+      if (result.user && result.session?.token) {
+        localStorage.setItem('authToken', result.session.token);
+        setToken(result.session.token);
         setUser(result.user);
         setSession(result);
         return { success: true };
@@ -129,7 +181,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signup = async (name: string, email: string, password: string) => {
     try {
       const result = await authClient.signUpWithEmail({ name, email, password });
-      if (result.user) {
+      if (result.user && result.session?.token) {
+        localStorage.setItem('authToken', result.session.token);
+        setToken(result.session.token);
         setUser(result.user);
         setSession(result);
         return { success: true };
@@ -144,10 +198,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async () => {
     try {
       await authClient.signOut();
-      setUser(null);
-      setSession(null);
     } catch (error) {
       console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('authToken');
+      setToken(null);
+      setUser(null);
+      setSession(null);
     }
   };
 
@@ -161,7 +218,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signInWithGithub = async () => {
     try {
-      await authClient.signInWithSocial('github');
+      const response = await authClient.signInWithSocial('github');
+      // Handle the OAuth URL redirect
     } catch (error) {
       console.error('GitHub sign in error:', error);
     }
@@ -176,6 +234,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signInWithGithub,
     loading,
     session,
+    token,
   };
 
   return (

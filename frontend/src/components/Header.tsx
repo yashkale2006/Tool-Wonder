@@ -84,7 +84,7 @@ const Header: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm">
                       <User size={16} />
-                      <span>{user.name}</span>
+                      <span>{user.email}</span>
                     </div>
                     <button
                       onClick={logout}

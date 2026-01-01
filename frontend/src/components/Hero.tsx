@@ -4,7 +4,6 @@ import { Image, FileText, Calculator, Type, Code, Palette } from 'lucide-react';
 const Hero: React.FC = () => {
   const quickIcons = [
     { icon: Image, label: 'Image', href: '#image-tools' },
-    { icon: FileText, label: 'PDF Tools', href: '#document-tools' },
     { icon: Calculator, label: 'Calculators', href: '#calculator-tools' },
     { icon: Type, label: 'Text', href: '#text-tools' },
     { icon: Code, label: 'Developer Tools', href: '#developer-tools' },

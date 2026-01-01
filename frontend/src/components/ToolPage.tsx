@@ -9,18 +9,14 @@ import ImageResizer from './ImageResizer';
 import ImageCropper from './ImageCropper';
 import ImageOCR from './ImageOCR';
 import ImageRotator from './ImageRotator';
-import PdfToWord from './PdfToWord';
-import PdfCompressor from './PdfCompressor';
-import PdfMergerSplitter from './PdfMergerSplitter';
+
 import ScientificCalculator from './ScientificCalculator';
 import AgeCalculator from './AgeCalculator';
 import BMICalculator from './BMICalculator';
 import CurrencyConverter from './CurrencyConverter';
 import LoanEMICalculator from './LoanEMICalculator';
 import GSTCalculator from './GSTCalculator';
-import FormatConverter from './FormatConverter';
-import PdfLockUnlock from './PdfLockUnlock';
-import PdfEsign from './PdfEsign';
+
 import TextCaseConverter from './TextCaseConverter';
 import RemoveDuplicates from './RemoveDuplicates';
 import TextSorter from './TextSorter';
@@ -139,12 +135,6 @@ const ToolPage: React.FC = () => {
           <ImageOCR />
         ) : tool.id === 'img-rot' ? (
           <ImageRotator />
-        ) : tool.id === 'doc-conv' ? (
-          <PdfToWord />
-        ) : tool.id === 'pdf-comp' ? (
-          <PdfCompressor />
-        ) : tool.id === 'pdf-merge' ? (
-          <PdfMergerSplitter />
         ) : tool.id === 'calc-sci' ? (
           <ScientificCalculator />
         ) : tool.id === 'calc-age' ? (
@@ -258,12 +248,6 @@ const ToolPage: React.FC = () => {
           <SalesTaxCalculator />
         ) : tool.id === 'calc-fuel' ? (
           <FuelCostCalculator />
-        ) : tool.id === 'doc-fmt' ? (
-          <FormatConverter />
-        ) : tool.id === 'pdf-lock' ? (
-          <PdfLockUnlock />
-        ) : tool.id === 'pdf-sign' ? (
-          <PdfEsign />
         ) : tool.id.startsWith('pdf-') || tool.id.startsWith('doc-') || tool.id === 'calc-curr' || tool.id.startsWith('img-') ? (
           <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-8">
             <div className="text-center py-20">

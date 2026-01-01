@@ -4,7 +4,7 @@
 
 ![ToolsWonder Landing Page](assets/landing-page.png)
 
-ToolsWonder is a comprehensive web application that provides a wide range of online tools and utilities to simplify your daily tasks. From image editing and document conversion to calculations, text processing, and developer utilities, everything you need is available in one convenient location.
+ToolsWonder is a comprehensive web application that provides a wide range of online tools and utilities to simplify your daily tasks. From image editing to calculations, text processing, and developer utilities, everything you need is available in one convenient location.
 
 ## Features
 

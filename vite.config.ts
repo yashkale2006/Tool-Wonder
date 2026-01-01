@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: 'ToolsWonder',
           short_name: 'ToolsWonder',
-          description: 'Your Daily Tools, All in One Place - Over 35+ online tools for image editing, document conversion, calculations, and more',
+          description: 'Your Daily Tools, All in One Place - Over 35+ online tools for image editing, calculations, and more',
           theme_color: '#3b82f6',
           background_color: '#f8fafc',
           display: 'standalone',

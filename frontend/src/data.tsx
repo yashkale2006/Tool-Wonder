@@ -17,13 +17,7 @@ export const CATEGORIES: CategoryDefinition[] = [
     icon: Image,
     bgColor: 'bg-blue-50 dark:bg-blue-900/20'
   },
-  {
-    id: 'document',
-    title: 'Document Tools',
-    description: 'Manage and convert your documents with ease',
-    icon: FileText,
-    bgColor: 'bg-indigo-50 dark:bg-indigo-900/20'
-  },
+
   {
     id: 'calculator',
     title: 'Calculator Tools',
@@ -79,13 +73,7 @@ export const TOOLS: Tool[] = [
   { id: 'img-ocr', name: 'Image to Text (OCR)', description: 'Extract text from images using AI', icon: ScanText, category: 'image', isNew: true },
   { id: 'img-rot', name: 'Image Rotator', description: 'Rotate or flip images horizontally/vertically', icon: RefreshCcw, category: 'image' },
 
-  // Document Tools
-  { id: 'doc-conv', name: 'PDF to Word', description: 'Convert PDF files to editable Word documents', icon: File, category: 'document', isPopular: true },
-  { id: 'pdf-comp', name: 'PDF Compressor', description: 'Reduce PDF file size for easier sharing', icon: FileArchive, category: 'document' },
-  { id: 'pdf-merge', name: 'PDF Merger & Splitter', description: 'Combine multiple PDFs or split pages', icon: Scissors, category: 'document' },
-  { id: 'doc-fmt', name: 'Format Converter', description: 'Convert between various document formats', icon: ArrowRightLeft, category: 'document' },
-  { id: 'pdf-lock', name: 'PDF Lock/Unlock', description: 'Add or remove passwords from PDF files', icon: Lock, category: 'document' },
-  { id: 'pdf-sign', name: 'eSign PDF', description: 'Add digital signatures to your PDF documents', icon: PenTool, category: 'document', isNew: true },
+
 
   // Calculator Tools
   { id: 'calc-sci', name: 'Scientific Calculator', description: 'Advanced calculator with scientific functions', icon: Sigma, category: 'calculator' },

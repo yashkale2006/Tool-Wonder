@@ -35,7 +35,7 @@ interface AuthProviderProps {
 }
 
 class AuthClient {
-  private baseURL = 'http://localhost:3001';
+  private baseURL = 'https://backend-pr2u.onrender.com';
 
   private getAuthHeaders() {
     const token = localStorage.getItem('authToken');
